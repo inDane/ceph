@@ -5513,6 +5513,23 @@ options:
     - startup
   see_also:
     - bluestore_allocation_recovery_threads
+- name: bluestore_accept_corrupted_onode_recovery
+  type: str
+  level: advanced
+  desc: How to handle undecodable onodes during allocation recovery
+  long_desc: Applies only to allocation recovery after an unclean shutdown.
+    Value 'never' makes recovery abort on any undecodable onode, even during
+    read-only fsck. Value 'read-only' lets read-only fsck skip and report such
+    onodes; the recovered allocation is never persisted in that mode. Mount,
+    repair, and trim always abort.
+  default: read-only
+  enum_values:
+  - never
+  - read-only
+  flags:
+    - startup
+  see_also:
+    - bluestore_allocation_recovery_threads
 - name: bluestore_debug_inject_allocation_from_file_failure
   type: float
   level: dev
@@ -7005,6 +7022,14 @@ options:
     database when cleanup was incomplete. DO NOT CHANGE THIS UNLESS YOU UNDERSTAND
     THE RAMIFICATIONS. CORRUPTION MAY RESULT.
   default: true
+  tags:
+  - client
+- name: cephsqlite_inject_stat_error_probability
+  type: float
+  level: dev
+  desc: Probability that the libcephsqlite VFS fails a stat() with a fake I/O
+    error, for testing
+  default: 0
   tags:
   - client
 - name: bdev_type
